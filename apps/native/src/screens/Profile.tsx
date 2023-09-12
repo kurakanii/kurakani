@@ -1,20 +1,25 @@
 import Box from '@components/Box'
-import { trpc } from '@libs/trpc'
+import { useNavigation } from '@react-navigation/native'
+import colors from 'assets/colors'
 import { Text, View } from 'react-native'
+import { Button } from 'tamagui'
 export default function Profile() {
-    const { isError, data, isLoading, error } = trpc.getUser.useQuery()
-
-    if (isLoading) {
-        return (
-            <Box>
-                <Text>Loading..........</Text>
-            </Box>
-        )
-    }
-
+    const navigation = useNavigation()
     return (
-        <View className="flex-1 justify-center items-center">
-            <Text className="text-red-500">{data.message}</Text>
-        </View>
+        <Box>
+            <View className="flex justify-center text-center m-2">
+                <Text className="text-2xl font-bold ">Welcome!</Text>
+                <Text>Sign in or create a new account</Text>
+
+                <Button
+                    className="w-full mt-3"
+                    onPress={() => {
+                        navigation.navigate('register')
+                    }}
+                >
+                    Go to Sign In
+                </Button>
+            </View>
+        </Box>
     )
 }

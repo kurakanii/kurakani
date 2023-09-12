@@ -4,6 +4,9 @@ import React, { useState } from 'react'
 import Navigation from './Navigation'
 import getBaseUrl from './helper/url'
 import { trpc } from './libs/trpc'
+import { TamaguiProvider } from 'tamagui'
+import config from '../tamagui.config'
+import { useFonts } from 'expo-font'
 
 export default function App() {
     const [queryClient] = useState(() => new QueryClient())
@@ -13,11 +16,23 @@ export default function App() {
             transformer: null,
         })
     )
+
+    const [loaded] = useFonts({
+        Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
+        InterBold: require('@tamagui/font-inter/otf/Inter-Bold.otf'),
+    })
+
+    if (!loaded) {
+        console.log('font still not loading')
+    }
+
     return (
-        <trpc.Provider client={trpcClient} queryClient={queryClient}>
-            <QueryClientProvider client={queryClient}>
-                <Navigation />
-            </QueryClientProvider>
-        </trpc.Provider>
+        <TamaguiProvider config={config}>
+            <trpc.Provider client={trpcClient} queryClient={queryClient}>
+                <QueryClientProvider client={queryClient}>
+                    <Navigation />
+                </QueryClientProvider>
+            </trpc.Provider>
+        </TamaguiProvider>
     )
 }
